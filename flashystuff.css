@@ -1,0 +1,157 @@
+/* ── TEXT UTILITY CLASSES ─────────────────────────────────────────────────── */
+
+.regtex { font-family: 'Inter', sans-serif; }
+
+/* shrinks text. great for stage directions and excuses. */
+.bt-small { font-size: 0.6em; }
+
+
+/* ── SHAKE ────────────────────────────────────────────────────────────────── */
+/* for when words need to express that they are NOT okay. */
+
+@keyframes bt-shake-anim {
+  0%, 100% { transform: translate(0, 0); }
+  20%       { transform: translate(-1px, 0.5px); }
+  40%       { transform: translate(1px, -0.5px); }
+  60%       { transform: translate(-0.5px, 1px); }
+  80%       { transform: translate(0.5px, -1px); }
+}
+
+.bt-shake {
+  display: inline-block;
+  animation: bt-shake-anim 0.25s infinite;
+}
+
+
+/* ── ORBIT ────────────────────────────────────────────────────────────────── */
+/* spins the text in a circle. it has places to be. */
+
+@keyframes bt-orbit-anim {
+  from { transform: rotate(0deg) translateX(6px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(6px) rotate(-360deg); }
+}
+
+.bt-orbit {
+  display: inline-block;
+  animation: bt-orbit-anim 0.8s linear infinite;
+}
+
+
+/* ── SHIVER ───────────────────────────────────────────────────────────────── */
+/* like shake but colder. and more emotionally repressed. */
+
+@keyframes bt-shiver-anim {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25%       { transform: translate(-1px, 0) rotate(-1deg); }
+  75%       { transform: translate(1px, 0) rotate(1deg); }
+}
+
+.bt-shiver {
+  display: inline-block;
+  animation: bt-shiver-anim 0.1s infinite;
+}
+
+
+/* ── FLY ──────────────────────────────────────────────────────────────────── */
+/* zooms in from the void and stays. very dramatic. very necessary. */
+
+@keyframes bt-fly-anim {
+  0%   { transform: scale(6); opacity: 0; }
+  40%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.bt-fly {
+  display: inline-block;
+  animation: bt-fly-anim 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+
+/* ── DIALOGUE BOX ─────────────────────────────────────────────────────────── */
+/* the whole box. portrait left, text right. very RPG of it. */
+
+.bt-box {
+  display: flex;
+  align-items: stretch;
+  border: 2px solid #000;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  min-height: 120px;
+  cursor: pointer;
+  user-select: none;
+  background: #fff;
+  max-width: 600px;
+}
+
+
+/* ── PORTRAIT ─────────────────────────────────────────────────────────────── */
+/* the face on the left. swaps per page. very expressive. */
+
+.bt-portrait {
+  width: 120px;
+  min-width: 120px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 2px solid #000;
+  overflow: hidden;
+}
+
+.bt-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* shown when no image is set. mysterious. */
+.bt-portrait-placeholder { font-size: 40px; color: #aaa; }
+
+
+/* ── CONTENT AREA ─────────────────────────────────────────────────────────── */
+
+.bt-content {
+  flex: 1;
+  padding: 12px 14px 28px;
+  position: relative;
+}
+
+/* speaker name up top. small, shouting, professional. */
+.bt-name {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.bt-text {
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 48px;
+}
+
+
+/* ── CONTINUE PROMPT ──────────────────────────────────────────────────────── */
+/* blinks in the corner like "hey. HEY. click me." */
+
+@keyframes bt-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.bt-continue {
+  display: none;
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+.bt-continue.visible {
+  display: block;
+  animation: bt-blink 0.8s infinite;
+}

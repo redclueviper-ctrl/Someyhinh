@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="flashystuff.css">
+        <title>Yo,Akaru here!</title>
+    </head>
+    <body>
+
+        <h1>明星間|「あかる」Akaru Here!</h1>
+
+        <!-- the dialogue box. portrait on the left, text on the right. very cinematic. -->
+        <div class="bt-box" id="bt-box">
+            <div class="bt-portrait" id="bt-portrait">
+                <span class="bt-portrait-placeholder">?</span>
+            </div>
+            <div class="bt-content">
+                <div class="bt-name" id="bt-name"></div>
+                <div class="bt-text" id="bt-text"></div>
+                <span class="bt-continue" id="bt-continue">▼ click or space</span>
+            </div>
+        </div>
+
+        <script>
+
+        // ── PAGES ──────────────────────────────────────────────────────────────
+        // each page is one dialogue block. set img to swap the portrait,
+        // leave it out to keep the last one, or set null to show the "?" placeholder.
+        // html supports all the bt- classes. go nuts.
+
+        const pages = [
+
+            {
+                name: "Akaru",
+                img: "https://codehs.com/uploads/333c51da56e6246c6e97b91705a80399",
+                html: `<em>So</em> you've been wondering what I'm doin here and why am I
+                       introducin' myself <span class="bt-orbit">haha.</span>
+                       <em><strong>BUT</strong></em> you see, I like computers.
+                       <br><br>`
+            },
+            {
+                name:"Akaru",
+                html: `<span class="bt-small">(tumbleweed sounds)</span>`
+            },
+            {
+                img:"https://codehs.com/uploads/615888a1e1837587f5ce039ce88456a6",
+                name:"Director",
+                html:`<span class="bt-fly">STICK</span> <span class="bt-fly">TO </span> <span class="bt-fly">THE</span> <span class="bt-fly"> SCRIPT</span>`
+            },
+
+            {
+                name: "Akaru",
+                img: "https://codehs.com/uploads/fc9340f6f916e6d1e4830c572f4aa3ce",
+                html: `<em><span class="bt-shake">What else do you want me to say?</span></em>`
+            },
+
+            {
+                name: "Akaru",
+                html: `This <span class="bt-shake">guy.</span>`
+            },
+
+            {
+                name: "Akaru",
+                html: `<span class="bt-small">(checks script)</span>`,
+                img:"https://codehs.com/uploads/3f85dc0af85380e4cd6fa88b143739f9"
+            },
+
+            {
+                name: "Akaru",
+                img:"https://codehs.com/uploads/bab79f6fafd2ebb58b9e7aea537ae54b",
+                html: `So, I'm <span class="bt-orbit">Akaru Hoshima</span>, a very well rounded
+                       individual who loves computer science, computers, video games, and video
+                       game development. Infact, that's how this website even came to be, because
+                       I thought that <em>coding</em> is <span class="bt-orbit">cool.</span>`
+            },
+
+            {
+                name: "Akaru",
+                img:"https://codehs.com/uploads/8f64e77b6841c48b630e1e0e4201062d",
+                html: `<span class="bt-small">Oh yeah- I forgot, </span>I study
+                       <span class="bt-orbit">Japanese</span>, hence the japanese name above
+                       which means light between the stars.`
+            },
+
+            {
+                name: "Akaru",
+                img:"https://codehs.com/uploads/e745a602f1a2648e31e0f09ca28a05bb",
+                html: `<span class="bt-small">Spent an hour trying to research it by the way-</span>`
+            },
+
+            {
+                name: "Akaru",
+                img:"https://codehs.com/uploads/fc9340f6f916e6d1e4830c572f4aa3ce",
+                html: `<strong><span class="bt-orbit">Ahem.</span></strong>
+                       Sorry, getting a little off topic.`
+            },
+
+            {
+                name: "Akaru",
+                html: `So I do like doing cool stuff, I'm a <span class="bt-shake">hardcore</span>
+                       roblox fan, both development and gaming wise. But I do play
+                       <span class="bt-orbit">anime-styled games</span> from time to time, like
+                       <span class="bt-fly">Punishing Gray Raven,</span>
+                       <span class="bt-fly">Wuthering Waves</span> and
+                       <span class="bt-fly">Arknights Endfield.</span>`
+            },
+
+            {
+                name: "Akaru",
+                html: `About the game development process, I'm mostly a VFX Artist as of right
+                       now on roblox studio. <em>Currently,</em> I'm leaning into
+                       <span class="bt-orbit">modeling</span> practice, because I'm realizing how
+                       <span class="bt-shiver">essential</span> modeling is for the <em>whole</em>
+                       <span class="bt-orbit">process.</span>`
+            },
+
+            {
+                name: "Akaru",
+                html: `But <span class="bt-orbit">yeah</span>, that's practically it.`
+            },
+            {
+                name:"Akaru",
+                html:`<span class="bt-fly">Now</span> <span class="bt-fly">where's</span> <span class="bt-fly">my</span> <span class="bt-fly">money.</span>`
+            },
+            {
+                name:"Director",
+                img:"https://codehs.com/uploads/615888a1e1837587f5ce039ce88456a6",
+                html:`<span class="bt-fly">YOU </span> messed up <span class="bt-fly">SEVEN</span> <span class="bt-fly"> HUNDRED</span> times.`
+            },
+            {
+                name:"Akaru",
+                img:"https://codehs.com/uploads/161a6c88e7d04cc79527d5b61fa4f4d3",
+                html:`<span class="bt-fly">I</span> <span class="bt-fly"> see.</span>`
+            }
+
+        ];
+
+
+        // ── PORTRAIT ───────────────────────────────────────────────────────────
+        // swaps the image on the left. remembers the last one like a golden retriever.
+
+        const portrait = document.getElementById('bt-portrait');
+        const nameEl   = document.getElementById('bt-name');
+        const textEl   = document.getElementById('bt-text');
+        const cont     = document.getElementById('bt-continue');
+
+        let current = -1;
+        let typing = false;
+        let typeTimeout = null;
+        let lastImg = null;
+
+        function setPortrait(img) {
+
+            if (img === undefined) {
+                // no img key? keep whatever was last shown
+                portrait.innerHTML = lastImg
+                    ? `<img src="${lastImg}">`
+                    : `<span class="bt-portrait-placeholder">?</span>`;
+
+            } else if (img === null) {
+                // img: null means explicitly show the placeholder
+                portrait.innerHTML = `<span class="bt-portrait-placeholder">?</span>`;
+                lastImg = null;
+
+            } else {
+                // new image, set it and remember it
+                portrait.innerHTML = `<img src="${img}">`;
+                lastImg = img;
+            }
+
+        }
+
+
+        // ── TYPEWRITER ─────────────────────────────────────────────────────────
+        // types out html character by character. pauses on animated spans
+        // because they deserve a moment in the spotlight.
+
+        function typeHTML(el, html, done) {
+
+            const temp  = document.createElement('div');
+            temp.innerHTML = html;
+            const nodes = Array.from(temp.childNodes);
+
+            let ni = 0;
+            let ci = 0;
+
+            el.innerHTML = '';
+            typing = true;
+
+            function tick() {
+
+                if (ni >= nodes.length) {
+                    typing = false;
+                    done();
+                    return;
+                }
+
+                const node = nodes[ni];
+
+                if (node.nodeType === 3) {
+
+                    // plain text node — type it letter by letter
+                    if (ci === 0) el.appendChild(document.createTextNode(''));
+                    el.lastChild.textContent += node.textContent[ci];
+                    ci++;
+                    if (ci >= node.textContent.length) { ci = 0; ni++; }
+
+                } else {
+
+                    // html element — drop it in whole, then maybe pause
+                    el.appendChild(node.cloneNode(true));
+                    ni++;
+
+                    if (node.classList && (
+                        node.classList.contains('bt-orbit')  ||
+                        node.classList.contains('bt-shake')  ||
+                        node.classList.contains('bt-shiver') ||
+                        node.classList.contains('bt-fly')
+                    )) {
+                        // bt-fly gets a longer pause since it's being dramatic about it
+                        typeTimeout = setTimeout(tick, node.classList.contains('bt-fly') ? 700 : 300);
+                        return;
+                    }
+
+                }
+
+                typeTimeout = setTimeout(tick, 22);
+
+            }
+
+            tick();
+
+        }
+
+
+        // ── PAGE DISPLAY ───────────────────────────────────────────────────────
+        // loads a page by index. sets the name, swaps the portrait, starts typing.
+
+        function showPage(i) {
+
+            const page = pages[i];
+
+            nameEl.textContent = page.name || '';
+            setPortrait(page.img);
+            cont.classList.remove('visible');
+
+            typeHTML(textEl, page.html, () => {
+                if (i < pages.length - 1) cont.classList.add('visible');
+            });
+
+        }
+
+
+        // ── ADVANCE ────────────────────────────────────────────────────────────
+        // click or space to go forward. if still typing, skip to the end instead.
+        // very respectful of impatient users.
+
+        function advance() {
+
+            if (typing) {
+                // skip! no patience? fine.
+                clearTimeout(typeTimeout);
+                typing = false;
+                textEl.innerHTML = pages[current].html;
+                if (current < pages.length - 1) cont.classList.add('visible');
+                return;
+            }
+
+            cont.classList.remove('visible');
+            current++;
+
+            if (current >= pages.length) return; // that's all folks
+
+            showPage(current);
+
+        }
+
+        // click the box or press space to advance
+        document.getElementById('bt-box').addEventListener('click', advance);
+        document.addEventListener('keydown', e => {
+            if (e.code === 'Space') { e.preventDefault(); advance(); }
+        });
+
+        // kick off the first page
+        advance();
+
+        </script>
+
+    </body>
+</html>
